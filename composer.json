@@ -1,0 +1,13 @@
+{
+  "name": "walkap/email-sender",
+  "version": "1.0.0",
+  "require": {
+    "phpmailer/phpmailer": "^6.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Model\\": "model/",
+      "Controller\\": "controller/"
+    }
+  }
+}
