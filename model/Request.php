@@ -22,7 +22,6 @@ class Request {
 		$this->phone = $phone;
 	}
 
-
 	/**
 	 * @return mixed
 	 */
@@ -64,7 +63,5 @@ class Request {
 	public function setPhone( $phone ) {
 		$this->phone = $phone;
 	}
-
-
 
 }
