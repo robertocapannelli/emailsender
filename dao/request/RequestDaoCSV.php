@@ -25,6 +25,11 @@ class RequestDaoCSV implements RequestDao {
 		$array = (array) $request;
 		$line = [];
 
+		//Get the request date
+		$today = date( "Y-m-d H:i:s" );
+		array_push($line, $today);
+
+		//Compose the line from the object array
 		foreach ($array as $element){
 			array_push($line, $element);
 		}
