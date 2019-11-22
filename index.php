@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<form enctype="multipart/form-data" role="form" method="post" action="send_email.php">
+	<form enctype="multipart/form-data" role="form" method="post" action="request.php">
 		<input type="text" name="name" placeholder="Type your name" required>
 		<br>
 		<input type="email" name="email" placeholder="Type your email" required>
