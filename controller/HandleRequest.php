@@ -2,6 +2,7 @@
 
 namespace Controller;
 
+use Dao\DaoFactory;
 use Model\Request;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -38,11 +39,12 @@ class HandleRequest {
 
 	/**
 	 * Send the request created
+	 *
 	 * @param Request $request
 	 */
 	public function sendRequest( Request $request ) {
 
-		$dotenv = Dotenv\Dotenv::create(__DIR__ . "/../" );
+		$dotenv = Dotenv\Dotenv::create( __DIR__ . "/../" );
 		$dotenv->load();
 
 		$SENDER        = $_ENV['SENDER'];
@@ -90,4 +92,15 @@ class HandleRequest {
 		}
 	}
 
+	/**
+	 * Save a request in storage
+	 *
+	 * @param DaoFactory $factory
+	 * @param $request
+	 *
+	 * @return mixed
+	 */
+	public function saveRequest( DaoFactory $factory, $request ) {
+		return $factory->getDaoFactory( $request );
+	}
 }
