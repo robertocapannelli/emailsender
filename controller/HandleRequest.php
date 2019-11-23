@@ -2,13 +2,14 @@
 
 namespace Controller;
 
-use Dao\DaoFactory;
+use Dao\DaoFactoryCSV;
 use Model\Request;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Dotenv;
 
 class HandleRequest {
+	const CSV = 1;
 	private $request;
 
 	/**
@@ -92,15 +93,23 @@ class HandleRequest {
 		}
 	}
 
+
 	/**
 	 * Save a request in storage
 	 *
-	 * @param DaoFactory $factory
+	 * @param $dao_factory
 	 * @param $request
 	 *
 	 * @return mixed
 	 */
-	public function saveRequest( DaoFactory $factory, $request ) {
-		return $factory->getDaoFactory( $request );
+	public function saveRequest( $dao_factory, $request ) {
+		switch ( $dao_factory ) {
+			case self::CSV:
+				$dao_factory = new DaoFactoryCSV();
+				break;
+			default:
+				break;
+		}
+		return $dao_factory->getDaoFactory( $request );
 	}
 }

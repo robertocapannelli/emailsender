@@ -16,7 +16,7 @@ $request = new HandleRequest();
 //Get data from form
 $get_request = $request->createRequest( $name, $email, $phone );
 
-$insert_request = $request->saveRequest( new DaoFactoryCSV(), $get_request );
+$insert_request = $request->saveRequest( 1, $get_request );
 
 //Send the request
 $request->sendRequest( $get_request );
