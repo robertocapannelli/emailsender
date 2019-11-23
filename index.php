@@ -1,3 +1,8 @@
+<?php
+use Controller\HandleTrafficTracking;
+// Load Composer's autoloader
+require 'vendor/autoload.php';
+?>
 <!doctype html>
 <html lang="">
 <head>
@@ -7,6 +12,11 @@
 	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php
+    $traffic = new HandleTrafficTracking();
+    $traffic->googleAnalitycs();
+    $traffic->facebookPixel();;
+    ?>
 </head>
 <body>
 	<form enctype="multipart/form-data" role="form" method="post" action="request.php">
