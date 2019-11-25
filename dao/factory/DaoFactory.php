@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Dao;
 
 abstract class DaoFactory {

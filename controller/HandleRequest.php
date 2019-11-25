@@ -7,6 +7,9 @@ use Model\Request;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Dotenv;
+use Respect\Validation\Exceptions\NestedValidationException;
+use Respect\Validation\Validator as validator;
+
 
 class HandleRequest {
 	const CSV = 1;
@@ -25,11 +28,33 @@ class HandleRequest {
 	 */
 	public function createRequest( $name, $email, $phone ) {
 
-		if ( ! empty( $name ) && ! empty( $email ) && ! empty( $phone ) ) {
-			$name  = filter_var( ucwords( strip_tags( trim( $name ) ) ), FILTER_SANITIZE_STRING );
-			$email = filter_var( strip_tags( trim( $email ) ), FILTER_SANITIZE_EMAIL );
-			$phone = filter_var( strip_tags( trim( $phone ) ), FILTER_SANITIZE_NUMBER_INT );
-		} else {
+		$isValid = true;
+
+		try {
+			validator::alpha()->assert( $name );
+		} catch ( NestedValidationException $e ) {
+			$errors  = $e->getFullMessage();
+			$isValid = false;
+			echo $errors . PHP_EOL;
+		}
+
+		try {
+			validator::email()->assert( $email );
+		} catch ( NestedValidationException $e ) {
+			$errors  = $e->getFullMessage();
+			$isValid = false;
+			echo $errors . PHP_EOL;
+		}
+
+		try {
+			validator::phone()->assert( $phone );
+		} catch ( NestedValidationException $e ) {
+			$errors  = $e->getFullMessage();
+			$isValid = false;
+			echo $errors . PHP_EOL;
+		}
+
+		if ( ! $isValid ) {
 			return null;
 		}
 
@@ -93,7 +118,6 @@ class HandleRequest {
 		}
 	}
 
-
 	/**
 	 * Save a request in storage
 	 *
@@ -110,6 +134,7 @@ class HandleRequest {
 			default:
 				break;
 		}
+
 		return $dao_factory->getDaoFactory( $request );
 	}
 }
