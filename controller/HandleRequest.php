@@ -37,6 +37,8 @@ class HandleRequest {
 					case 'phone':
 						v::phone()->assert( $value );
 						break;
+					default:
+						v::stringType()->assert($value);
 				}
 
 			} catch ( NestedValidationException $e ) {
@@ -72,6 +74,8 @@ class HandleRequest {
 	 */
 	public function sendRequest( Request $request ) {
 
+		//TODO these information should be positioned in a dedicated class public visible or define as constants?
+		//TODO like this we are repeating ourselves
 		$dotenv = Dotenv\Dotenv::create( __DIR__ . "/../" );
 		$dotenv->load();
 
