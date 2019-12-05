@@ -6,18 +6,19 @@ use Controller\HandleTrafficTracking;
 // Load Composer's autoloader
 require 'vendor/autoload.php';
 
+//Check if a post action has been made
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 
-	$nameError = $emailError = $phoneError = '';
-
-	//Instantiate the form controller
+    //Instantiate the form controller
 	$handle_req = new HandleRequest();
 
-	$request = $handle_req->createReq( $_POST['name'], $_POST['email'], $_POST['phone'] );
-
-	$isValid = $handle_req->isRequestValid( $request, $messages );
+	//Check if form fields are valid
+	$isValid = $handle_req->isRequestValid( $_POST, $messages );
 
 	if ( $isValid ) {
+		//create aa request object
+		$request = $handle_req->createRequest( $_POST['name'], $_POST['email'], $_POST['phone'] );
+
 		//Save data to persistence
 		$insert_request = $handle_req->saveRequest( 1, $request );
 

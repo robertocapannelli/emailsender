@@ -15,40 +15,37 @@ class HandleRequest {
 	const CSV = 1;
 	private $request;
 
+
 	/**
-	 * Validate request
-	 *
-	 * @param Request $request
+	 * @param $values
 	 * @param $array
 	 *
 	 * @return bool
 	 */
-	public function isRequestValid( Request $request, &$array ) {
+	public function isRequestValid( $values, &$array ) {
+		$error = [];
 
-		$nameError = $emailError = $phoneError = true;
+		foreach ( $values as $key => $value ) {
+			try {
+				switch ( $key ) {
+					case 'name':
+						v::alpha()->assert( $value );
+						break;
+					case 'email':
+						v::email()->assert( $value );
+						break;
+					case 'phone':
+						v::phone()->assert( $value );
+						break;
+				}
 
-		try {
-			$nameError = v::alpha()->assert( $request->getName() );
-		} catch ( NestedValidationException $e ) {
-			$array['name'] = $e->getFullMessage();
-			$nameError     = false;
+			} catch ( NestedValidationException $e ) {
+				$array[ $key ] = $e->getFullMessage();
+				$error[ $key ] = false;
+			}
 		}
 
-		try {
-			$emailError = v::email()->assert( $request->getEmail() );
-		} catch ( NestedValidationException $e ) {
-			$array['email'] = $e->getFullMessage();
-			$emailError     = false;
-		}
-
-		try {
-			$phoneError = v::phone()->assert( $request->getPhone() );
-		} catch ( NestedValidationException $e ) {
-			$array['phone'] = $e->getFullMessage();
-			$phoneError     = false;
-		}
-
-		return $nameError && $emailError && $phoneError;
+		return ! in_array( false, $error );
 	}
 
 
@@ -61,7 +58,7 @@ class HandleRequest {
 	 *
 	 * @return Request
 	 */
-	public function createReq( $name, $email, $phone ) {
+	public function createRequest( $name, $email, $phone ) {
 
 		$this->request = new Request( $name, $email, $phone );
 

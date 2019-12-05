@@ -47,8 +47,7 @@ class HandleTrafficTracking {
 		<?php }
 	}
 
-	public
-	function facebookPixel() {
+	public function facebookPixel() {
 		$this->setDotenv();
 		$this->getDotenv()->load();
 
