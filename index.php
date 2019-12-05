@@ -7,17 +7,22 @@ use Controller\HandleTrafficTracking;
 require 'vendor/autoload.php';
 
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
-	//Instantiate the form controller
-	$handle_request = new HandleRequest();
-	//Get data from form
-	$request = $handle_request->createRequest( $_POST['name'], $_POST['email'], $_POST['phone']  );
 
-	if ( $request ) {
+	$nameError = $emailError = $phoneError = '';
+
+	//Instantiate the form controller
+	$handle_req = new HandleRequest();
+
+	$request = $handle_req->createReq( $_POST['name'], $_POST['email'], $_POST['phone'] );
+
+	$isValid = $handle_req->isRequestValid( $request, $messages );
+
+	if ( $isValid ) {
 		//Save data to persistence
-		$insert_request = $handle_request->saveRequest( 1, $request );
+		$insert_request = $handle_req->saveRequest( 1, $request );
 
 		//Send the request
-		$handle_request->sendRequest( $request );
+		$handle_req->sendRequest( $request );
 	}
 }
 
@@ -39,11 +44,14 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 </head>
 <body>
 <form enctype="multipart/form-data" role="form" method="post" action="<?= htmlentities( $_SERVER['PHP_SELF'] ); ?>">
-    <input type="text" name="name" placeholder="Type your name" required>
+    <input type="text" name="name" placeholder="Type your name">
+    <span class="error"><?= ! empty( $messages['name'] ) ? $messages['name'] : ''; ?></span>
     <br>
-    <input type="email" name="email" placeholder="Type your email" required>
+    <input type="email" name="email" placeholder="Type your email">
+    <span class="error"><?= ! empty( $messages['email'] ) ? $messages['email'] : ''; ?></span>
     <br>
-    <input type="tel" name="phone" placeholder="Type your phone number" required>
+    <input type="tel" name="phone" placeholder="Type your phone number">
+    <span class="error"><?= ! empty( $messages['phone'] ) ? $messages['phone'] : ''; ?></span>
     <br>
     <input type="submit" value="Send">
 </form>

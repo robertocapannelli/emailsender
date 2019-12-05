@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Dotenv;
 use Respect\Validation\Exceptions\NestedValidationException;
-use Respect\Validation\Validator as validator;
+use Respect\Validation\Validator as v;
 
 
 class HandleRequest {
@@ -16,9 +16,44 @@ class HandleRequest {
 	private $request;
 
 	/**
-	 * Create a request from user data
+	 * Validate request
 	 *
-	 * @TODO this should validate and sanitize data
+	 * @param Request $request
+	 * @param $array
+	 *
+	 * @return bool
+	 */
+	public function isRequestValid( Request $request, &$array ) {
+
+		$nameError = $emailError = $phoneError = true;
+
+		try {
+			$nameError = v::alpha()->assert( $request->getName() );
+		} catch ( NestedValidationException $e ) {
+			$array['name'] = $e->getFullMessage();
+			$nameError     = false;
+		}
+
+		try {
+			$emailError = v::email()->assert( $request->getEmail() );
+		} catch ( NestedValidationException $e ) {
+			$array['email'] = $e->getFullMessage();
+			$emailError     = false;
+		}
+
+		try {
+			$phoneError = v::phone()->assert( $request->getPhone() );
+		} catch ( NestedValidationException $e ) {
+			$array['phone'] = $e->getFullMessage();
+			$phoneError     = false;
+		}
+
+		return $nameError && $emailError && $phoneError;
+	}
+
+
+	/**
+	 * Create a request from user data
 	 *
 	 * @param $name
 	 * @param $email
@@ -26,37 +61,7 @@ class HandleRequest {
 	 *
 	 * @return Request
 	 */
-	public function createRequest( $name, $email, $phone ) {
-
-		$isValid = true;
-
-		try {
-			validator::alpha()->assert( $name );
-		} catch ( NestedValidationException $e ) {
-			$errors  = $e->getFullMessage();
-			$isValid = false;
-			echo $errors . PHP_EOL;
-		}
-
-		try {
-			validator::email()->assert( $email );
-		} catch ( NestedValidationException $e ) {
-			$errors  = $e->getFullMessage();
-			$isValid = false;
-			echo $errors . PHP_EOL;
-		}
-
-		try {
-			validator::phone()->assert( $phone );
-		} catch ( NestedValidationException $e ) {
-			$errors  = $e->getFullMessage();
-			$isValid = false;
-			echo $errors . PHP_EOL;
-		}
-
-		if ( ! $isValid ) {
-			return null;
-		}
+	public function createReq( $name, $email, $phone ) {
 
 		$this->request = new Request( $name, $email, $phone );
 
