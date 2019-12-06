@@ -16,15 +16,38 @@ class HandleRequest {
 	private $request;
 
 
+	private static $instance = null;
+
+	/**
+	 * HandleRequest constructor.
+	 */
+	private function __construct() {
+	}
+
+
+	/**
+	 * Singleton
+	 *
+	 * @return HandleRequest|null
+	 */
+	public static function getInstance() {
+		if ( self::$instance == null ) {
+			self::$instance = new HandleRequest();
+		}
+
+		return self::$instance;
+	}
+
 	/**
 	 * @param $values
 	 * @param $array
 	 *
 	 * @return bool
 	 */
-	public function isRequestValid( $values, &$array ) {
+	static public function isRequestValid( $values, &$array ) {
 		$error = [];
 
+		//TODO how can we avoid this hardcoded loop?
 		foreach ( $values as $key => $value ) {
 			try {
 				switch ( $key ) {
@@ -38,7 +61,7 @@ class HandleRequest {
 						v::phone()->assert( $value );
 						break;
 					default:
-						v::stringType()->assert($value);
+						v::stringType()->assert( $value );
 				}
 
 			} catch ( NestedValidationException $e ) {
@@ -52,17 +75,44 @@ class HandleRequest {
 
 
 	/**
-	 * Create a request from user data
-	 *
-	 * @param $name
-	 * @param $email
-	 * @param $phone
+	 * @param $values
+	 */
+	public function processRequest( $values ) {
+
+		//Get values from the form and sanitize them
+		//TODO how can we avoid this hardcoded loop?????
+		foreach ( $values as $key => $value ) {
+			switch ( $key ) {
+				case 'name':
+					$values[ $key ] = filter_var( ucwords( strip_tags( trim( $value ) ) ), FILTER_SANITIZE_STRING );
+					break;
+				case 'email':
+					$values[ $key ] = filter_var( strip_tags( trim( $value ) ), FILTER_SANITIZE_EMAIL );
+					break;
+				case 'phone':
+					$values[ $key ] = filter_var( strip_tags( trim( $value ) ), FILTER_SANITIZE_STRING );
+					break;
+			}
+		}
+
+		//Instantiate the request object
+		$request = $this->createRequest( $values );
+
+		//Save the request to persistence
+		$this->saveRequest( 1, $request );
+
+		//Send request via email
+		$this->sendRequest( $request );
+	}
+
+	/**
+	 * @param $values
 	 *
 	 * @return Request
 	 */
-	public function createRequest( $name, $email, $phone ) {
+	private function createRequest( $values ) {
 
-		$this->request = new Request( $name, $email, $phone );
+		$this->request = new Request( $values['name'], $values['email'], $values['phone'] );
 
 		return $this->request;
 	}
@@ -72,7 +122,7 @@ class HandleRequest {
 	 *
 	 * @param Request $request
 	 */
-	public function sendRequest( Request $request ) {
+	private function sendRequest( Request $request ) {
 
 		//TODO these information should be positioned in a dedicated class public visible or define as constants?
 		//TODO like this we are repeating ourselves
@@ -132,7 +182,7 @@ class HandleRequest {
 	 *
 	 * @return mixed
 	 */
-	public function saveRequest( $dao_factory, $request ) {
+	private function saveRequest( $dao_factory, $request ) {
 		switch ( $dao_factory ) {
 			case self::CSV:
 				$dao_factory = new DaoFactoryCSV();
