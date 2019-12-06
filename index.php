@@ -13,9 +13,9 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 	$handle_request = HandleRequest::getInstance();
 
 	//Check if form fields are valid
-	$isValid = $handle_request->isRequestValid( $_POST, $messages );
+	$is_valid = $handle_request->isRequestValid( $_POST, $messages );
 
-	if ( $isValid ) {
+	if ( $is_valid ) {
 		$handle_request->processRequest( $_POST );
 	}
 }
