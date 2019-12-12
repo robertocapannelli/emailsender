@@ -7,9 +7,9 @@ use Dotenv;
 class RequestDaoCSV implements RequestDao {
 
 	/**
-	 * Insert a request in the CSV file
-	 *
 	 * @param $request
+	 *
+	 * @return bool|mixed
 	 */
 	public function insertRequest( $request ) {
 
@@ -19,22 +19,33 @@ class RequestDaoCSV implements RequestDao {
 
 		$CSV_PATH = $_ENV['CSV_PATH'];
 
-		/*TODO this should throw an exception in case of failure or a logic*/
-		$csv = fopen($CSV_PATH, 'a');
-
-		$array = (array) $request;
-		$line = [];
-
-		//Get the request date
-		$today = date( "Y-m-d H:i:s" );
-		array_push($line, $today);
-
-		//Compose the line from the object array
-		foreach ($array as $element){
-			array_push($line, $element);
+		//Try to open the file pointer
+		if ( ! $file_pointer = fopen( $CSV_PATH, 'a' ) ) {
+			return false;
 		}
 
-		fputcsv( $csv, $line );
-		fclose($csv);
+		$array = (array) $request;
+		$row   = [];
+
+		//Get the request date
+		$date = date( "Y-m-d H:i:s" );
+		//Push the date in the row array
+		array_push( $row, $date );
+
+		//Compose the row from the object array
+		foreach ( $array as $element ) {
+			array_push( $row, $element );
+		}
+
+		//Try to put the row in the csv file
+		if ( ! fputcsv( $file_pointer, $row ) ) {
+			return false;
+		}
+
+		//Close the open file pointer
+		fclose( $file_pointer );
+
+		return true;
+
 	}
 }
