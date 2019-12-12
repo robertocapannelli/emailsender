@@ -9,8 +9,8 @@
   "autoload": {
     "psr-4": {
       "Model\\": "model/",
-      "Controller\\": "controller/",
-      "Dao\\": "dao/"
+      "Dao\\": "dao/",
+      "Controller\\": "controller/"
     }
   }
 }
