@@ -24,7 +24,9 @@ class RequestDaoCSV implements RequestDao {
 			return false;
 		}
 
+		//Cast an object to an array
 		$array = (array) $request;
+		//This is the row will be written on csv for a request
 		$row   = [];
 
 		//Get the request date
