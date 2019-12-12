@@ -38,18 +38,18 @@ class HandleRequest {
 	}
 
 	/**
-	 * @param $values
-	 * @param $array
+	 * @param $post
+	 * @param $error_messages
 	 *
 	 * @return bool
 	 */
-	public function isRequestValid( $values, &$array ) {
+	public function isRequestValid( $post, &$error_messages ) {
 		$error = [];
 
 		//TODO should check also the file uploaded?
 
 		//TODO how can we avoid this hardcoded loop?
-		foreach ( $values as $key => $value ) {
+		foreach ( $post as $key => $value ) {
 			try {
 				switch ( $key ) {
 					case 'name':
@@ -66,8 +66,8 @@ class HandleRequest {
 				}
 
 			} catch ( NestedValidationException $e ) {
-				$array[ $key ] = $e->getFullMessage();
-				$error[ $key ] = false;
+				$error_messages[ $key ] = $e->getFullMessage();
+				$error[ $key ]          = false;
 			}
 		}
 
@@ -167,12 +167,13 @@ class HandleRequest {
 
 	/**
 	 * Save the request to the persistence
+	 *
 	 * @param $dao_factory
-	 * @param $request
+	 * @param Request $request
 	 *
 	 * @return mixed
 	 */
-	private function saveRequest( $dao_factory, $request ) {
+	private function saveRequest( $dao_factory, Request $request ) {
 
 		//Check the kind of persistence has to be used
 		switch ( $dao_factory ) {

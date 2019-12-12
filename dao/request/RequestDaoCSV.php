@@ -3,15 +3,16 @@
 namespace Dao;
 
 use Dotenv;
+use Model\Request;
 
 class RequestDaoCSV implements RequestDao {
 
 	/**
-	 * @param $request
+	 * @param Request $request
 	 *
 	 * @return bool|mixed
 	 */
-	public function insertRequest( $request ) {
+	public function insertRequest( Request $request ) {
 
 		/*TODO This should be called just once see other implementation in handlerequest class*/
 		$dotenv = Dotenv\Dotenv::create( __DIR__ . "/../../" );

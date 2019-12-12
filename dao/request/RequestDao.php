@@ -1,14 +1,15 @@
 <?php
 
 namespace Dao;
+use Model\Request;
 
 interface RequestDao {
 	/**
 	 * Save the request in storage
 	 *
-	 * @param $request
+	 * @param Request $request
 	 *
 	 * @return mixed
 	 */
-	public function insertRequest( $request );
+	public function insertRequest( Request $request );
 }
