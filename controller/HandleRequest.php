@@ -15,7 +15,6 @@ class HandleRequest {
 	const CSV = 1;
 	private $request;
 
-
 	private static $instance = null;
 
 	/**
@@ -44,8 +43,10 @@ class HandleRequest {
 	 *
 	 * @return bool
 	 */
-	static public function isRequestValid( $values, &$array ) {
+	public function isRequestValid( $values, &$array ) {
 		$error = [];
+
+		//TODO should check also the file uploaded?
 
 		//TODO how can we avoid this hardcoded loop?
 		foreach ( $values as $key => $value ) {
@@ -73,46 +74,36 @@ class HandleRequest {
 		return ! in_array( false, $error );
 	}
 
-
 	/**
-	 * @param $values
+	 * @param $post
+	 *
+	 * @param $file
+	 *
+	 * @return Request
 	 */
-	public function processRequest( $values ) {
+	public function createRequest( $post, $file ) {
 
-		//Get values from the form and sanitize them
-		//TODO how can we avoid this hardcoded loop?????
-		foreach ( $values as $key => $value ) {
+		//Check all values and sanitize
+		foreach ( $post as $key => $value ) {
 			switch ( $key ) {
 				case 'name':
-					$values[ $key ] = filter_var( ucwords( strip_tags( trim( $value ) ) ), FILTER_SANITIZE_STRING );
+					$post[ $key ] = filter_var( ucwords( strip_tags( trim( $value ) ) ), FILTER_SANITIZE_STRING );
 					break;
 				case 'email':
-					$values[ $key ] = filter_var( strip_tags( trim( $value ) ), FILTER_SANITIZE_EMAIL );
+					$post[ $key ] = filter_var( strip_tags( trim( $value ) ), FILTER_SANITIZE_EMAIL );
 					break;
 				case 'phone':
-					$values[ $key ] = filter_var( strip_tags( trim( $value ) ), FILTER_SANITIZE_STRING );
+					$post[ $key ] = filter_var( strip_tags( trim( $value ) ), FILTER_SANITIZE_STRING );
 					break;
 			}
 		}
 
-		//Instantiate the request object
-		$request = $this->createRequest( $values );
+		$this->request = new Request( $post['name'], $post['email'], $post['phone'] );
 
-		//Save the request to persistence
-		$this->saveRequest( 1, $request );
-
-		//Send request via email
-		$this->sendRequest( $request );
-	}
-
-	/**
-	 * @param $values
-	 *
-	 * @return Request
-	 */
-	private function createRequest( $values ) {
-
-		$this->request = new Request( $values['name'], $values['email'], $values['phone'] );
+		//Check if a file was uploaded if so set the file in a request object
+		if ( isset( $file['file']['name'] ) ) {
+			$this->request->setFile( $file['file']['name'] );
+		}
 
 		return $this->request;
 	}
@@ -175,14 +166,15 @@ class HandleRequest {
 	}
 
 	/**
-	 * Save a request in storage
-	 *
+	 * Save the request to the persistence
 	 * @param $dao_factory
 	 * @param $request
 	 *
 	 * @return mixed
 	 */
 	private function saveRequest( $dao_factory, $request ) {
+
+		//Check the kind of persistence has to be used
 		switch ( $dao_factory ) {
 			case self::CSV:
 				$dao_factory = new DaoFactoryCSV();
@@ -191,6 +183,21 @@ class HandleRequest {
 				break;
 		}
 
+		//return the class that will handle the persistence
 		return $dao_factory->getDaoFactory( $request );
 	}
+
+	/**
+	 * Get values from the form passing an array
+	 *
+	 * @param Request $request
+	 */
+	public function processRequest( Request $request ) {
+		//Save the request to persistence
+		if ( $this->saveRequest( 1, $request ) ) {
+			//Send request via email
+			$this->sendRequest( $request );
+		}
+	}
 }
+

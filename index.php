@@ -8,15 +8,15 @@ require 'vendor/autoload.php';
 
 //Check if a post action has been made
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
-
 	//Instantiate the form controller
 	$handle_request = HandleRequest::getInstance();
-
 	//Check if form fields are valid
-	$is_valid = $handle_request->isRequestValid( $_POST, $messages );
-
-	if ( $is_valid ) {
-		$handle_request->processRequest( $_POST );
+	//TODO should also check the file is valid? How so?
+	if ( $handle_request->isRequestValid( $_POST, $messages ) ) {
+		//Create a request instantiating the request model
+		$request = $handle_request->createRequest( $_POST, $_FILES );
+		//Process the current request passing the model this method
+		$handle_request->processRequest( $request );
 	}
 }
 
@@ -47,6 +47,8 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
     <input type="tel" name="phone" placeholder="Type your phone number">
     <span class="error"><?= ! empty( $messages['phone'] ) ? $messages['phone'] : ''; ?></span>
     <br>
+    <input type="file" name="file" placeholder="Select a file">
+    <span class="error"></span>
     <input type="submit" value="Send">
 </form>
 </body>
