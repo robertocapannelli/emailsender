@@ -8,6 +8,7 @@ class Request {
 	private $name;
 	private $email;
 	private $phone;
+	private $file;
 
 	/**
 	 * Request constructor.
@@ -44,6 +45,13 @@ class Request {
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function getFile() {
+		return $this->file;
+	}
+
+	/**
 	 * @param mixed $email
 	 */
 	public function setEmail( $email ) {
@@ -62,6 +70,13 @@ class Request {
 	 */
 	public function setPhone( $phone ) {
 		$this->phone = $phone;
+	}
+
+	/**
+	 * @param $file
+	 */
+	public function setFile( $file ) {
+		$this->file = $file;
 	}
 
 }
