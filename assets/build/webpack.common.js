@@ -1,5 +1,5 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin'); //This genetates automatically the index.html even if we already have one
+//const HtmlWebpackPlugin = require('html-webpack-plugin'); //This genetates automatically the index.html even if we already have one
 const { CleanWebpackPlugin } = require('clean-webpack-plugin'); //This clean up the dist folder if there is something unused
 const ManifestPlugin = require('webpack-manifest-plugin'); //This will generate a manifest file
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -13,7 +13,7 @@ module.exports = {
         ]
     },
     output: {
-        filename: 'scripts/[name].[hash].js',
+        filename: 'scripts/[name].js',
         path: path.resolve(__dirname, '../../dist'),
     },
     module: {
@@ -88,12 +88,12 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
-        new HtmlWebpackPlugin(),
+        //new HtmlWebpackPlugin(),
         new ManifestPlugin(),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: devMode ? 'styles/[name].[hash].css' : 'styles/[name].css',
+            filename: devMode ? 'styles/[name].css' : 'styles/[name].css',
             chunkFilename: devMode ? '[id].css' : '[id].css',
             ignoreOrder: true,
         }),
