@@ -1,6 +1,6 @@
 <?php
 
-namespace Dao;
+namespace App\Dao;
 
 abstract class DaoFactory {
 

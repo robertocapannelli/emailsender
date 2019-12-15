@@ -1,7 +1,7 @@
 <?php
 
-namespace Dao;
-use Model\Request;
+namespace App\Dao;
+use App\Model\Request;
 
 interface RequestDao {
 	/**

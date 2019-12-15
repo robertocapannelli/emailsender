@@ -1,9 +1,10 @@
 <?php
 
-namespace Controller;
+namespace App\Controller;
 
-use Dao\DaoFactoryCSV;
-use Model\Request;
+use App\Dao\DaoFactoryCSV;
+use App\Helper;
+use App\Model\Request;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use Dotenv;
@@ -115,10 +116,10 @@ class HandleRequest {
 	 */
 	private function sendRequest( Request $request ) {
 
-		//TODO these information should be positioned in a dedicated class public visible or define as constants?
-		//TODO like this we are repeating ourselves
-		$dotenv = Dotenv\Dotenv::create( __DIR__ . "/../" );
-		$dotenv->load();
+		$helper = Helper::getInstance();
+
+		$helper->setDotenv();
+		$helper->getDotenv()->load();
 
 		$SENDER        = $_ENV['SENDER'];
 		$SENDER_NAME   = $_ENV['SENDER_NAME'];

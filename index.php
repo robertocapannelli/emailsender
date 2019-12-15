@@ -1,7 +1,7 @@
 <?php
 
-use Controller\HandleRequest;
-use Controller\HandleTrafficTracking;
+use App\Controller\HandleRequest;
+use App\Controller\HandleTrafficTracking;
 
 // Load Composer's autoloader
 require 'vendor/autoload.php';

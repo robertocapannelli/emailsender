@@ -1,9 +1,10 @@
 <?php
 
-namespace Dao;
+namespace App\Dao;
 
+use App\Helper;
 use Dotenv;
-use Model\Request;
+use App\Model\Request;
 
 class RequestDaoCSV implements RequestDao {
 
@@ -14,9 +15,10 @@ class RequestDaoCSV implements RequestDao {
 	 */
 	public function insertRequest( Request $request ) {
 
-		/*TODO This should be called just once see other implementation in handlerequest class*/
-		$dotenv = Dotenv\Dotenv::create( __DIR__ . "/../../" );
-		$dotenv->load();
+		$helper = Helper::getInstance();
+
+		$helper->setDotenv();
+		$helper->getDotenv()->load();
 
 		$CSV_PATH = $_ENV['CSV_PATH'];
 

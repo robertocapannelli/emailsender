@@ -1,33 +1,20 @@
 <?php
 
-namespace Controller;
+namespace App\Controller;
 
-use Dotenv;
+use App\Helper;
 
 class HandleTrafficTracking {
 
-	private $dotenv;
-
-	/**
-	 * @return mixed
-	 */
-	public function getDotenv() {
-		return $this->dotenv;
-	}
-
-	/**
-	 * @param mixed $dotnev
-	 */
-	public function setDotenv(): void {
-		$this->dotenv = Dotenv\Dotenv::create( __DIR__ . "/../" );
-	}
-
-	/**
+    /**
 	 * Add google analytics tracking code
 	 */
 	public function googleAnalitycs() {
-		$this->setDotenv();
-		$this->getDotenv()->load();
+
+		$helper = Helper::getInstance();
+		$helper->setDotenv();
+
+		$helper->getDotenv()->load();
 
 		if ( isset( $_ENV['GA_ID'] ) and ! empty( $_ENV['GA_ID'] ) ) {
 			?>
@@ -48,8 +35,10 @@ class HandleTrafficTracking {
 	}
 
 	public function facebookPixel() {
-		$this->setDotenv();
-		$this->getDotenv()->load();
+		$helper = Helper::getInstance();
+		$helper->setDotenv();
+
+		$helper->getDotenv()->load();
 
 		if ( isset( $_ENV['FB_PIXEL_ID'] ) && ! empty( $_ENV['FB_PIXEL_ID'] ) ) {
 			?>
