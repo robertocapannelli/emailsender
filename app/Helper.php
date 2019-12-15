@@ -40,6 +40,11 @@ class Helper {
 	 * Set the dot environment
 	 */
 	public function setDotenv(): void {
-		$this->dotenv = Dotenv\Dotenv::create( dirname( __DIR__ ) );
+		//TODO this always return uncaught
+		try {
+			$this->dotenv = Dotenv\Dotenv::create( dirname( __DIR__ ) );
+		} catch ( Dotenv\Exception\InvalidPathException | Dotenv\Exception\InvalidFileException | Dotenv\Exception\ValidationException $e ) {
+			echo $e->getMessage();
+		}
 	}
 }
