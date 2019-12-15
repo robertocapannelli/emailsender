@@ -30,6 +30,8 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
     <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="dist/styles/app.css" rel="stylesheet">
+
 	<?php
 	$traffic = new HandleTrafficTracking();
 	$traffic->googleAnalitycs();
@@ -51,6 +53,8 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
     <span class="error"></span>
     <input type="submit" value="Send">
 </form>
+
+<script type="text/javascript" src="dist/scripts/app.js"></script>
 </body>
 </html>
 
