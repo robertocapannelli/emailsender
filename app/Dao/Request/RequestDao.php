@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Dao;
+
 use App\Model\Request;
 
 interface RequestDao {

@@ -3,7 +3,6 @@
 namespace App\Dao;
 
 use App\Helper;
-use Dotenv;
 use App\Model\Request;
 
 class RequestDaoCSV implements RequestDao {
