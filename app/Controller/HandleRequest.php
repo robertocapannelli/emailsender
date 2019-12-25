@@ -129,27 +129,9 @@ class HandleRequest {
 		$mail = new PHPMailer( true );
 
 		try {
-			//Server settings
-			/*$mail->SMTPDebug = SMTP::DEBUG_LOWLEVEL;                      // Enable verbose debug output
-			$mail->isSMTP();                                            // Send using SMTP
-			$mail->Host       = 'smtp.server';                    // Set the SMTP server to send through
-			$mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-			$mail->Username   = 'smtp username';                     // SMTP username
-			$mail->Password   = 'password';                               // SMTP password
-			$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-			$mail->Port       = 465;        */                            // TCP port to connect to
-
 			//Recipients
 			$mail->setFrom( $SENDER, $SENDER_NAME );
 			$mail->addAddress( $RECEIVER, $RECEIVER_NAME );     // Add a recipient
-			//$mail->addAddress( 'ellen@example.com' );               // Name is optional
-			//$mail->addReplyTo( 'info@conteorologi.it', 'Information' );
-			//$mail->addCC( 'roberto@nwdesigns.it' );
-			//$mail->addBCC( 'bcc@example.com' );
-
-			// Attachments
-			//$mail->addAttachment( '/var/tmp/file.tar.gz' );         // Add attachments
-			//$mail->addAttachment( '/tmp/image.jpg', 'new.jpg' );    // Optional name
 
 			// Content
 			$mail->isHTML( true );                                  // Set email format to HTML
