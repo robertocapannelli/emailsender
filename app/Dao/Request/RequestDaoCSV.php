@@ -19,17 +19,27 @@ class RequestDaoCSV implements RequestDao {
 		$helper->setDotenv();
 		$helper->getDotenv()->load();
 
-		$CSV_PATH = $_ENV['CSV_PATH'];
+		if ( ! file_exists( './data' ) ) {
+			if ( ! mkdir( './data', 0777, true ) ) {
+				return false;
+			}
+
+			if ( $robots = fopen( './data/robots.txt', 'a' ) ) {
+				file_put_contents( './data/robots.txt', "User-agent: *\nDisallow: /" );
+			}
+
+			fclose( $robots );
+		}
 
 		//Try to open the file pointer
-		if ( ! $file_pointer = fopen( $CSV_PATH, 'a' ) ) {
+		if ( ! $file_pointer = fopen( $_ENV['CSV_PATH'], 'a' ) ) {
 			return false;
 		}
 
 		//Cast an object to an array
 		$array = (array) $request;
 		//This is the row will be written on csv for a request
-		$row   = [];
+		$row = [];
 
 		//Get the request date
 		$date = date( "Y-m-d H:i:s" );
