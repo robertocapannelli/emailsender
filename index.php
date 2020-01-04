@@ -8,8 +8,10 @@ require 'vendor/autoload.php';
 
 //Check if a post action has been made
 if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
+
 	//Instantiate the form controller
-	$handle_request = HandleRequest::getInstance();
+	$handle_request = new HandleRequest();
+
 	//Check if form fields are valid
 	//TODO should also check the file is valid? How so?
 	if ( $handle_request->isRequestValid( $_POST, $error_messages ) ) {

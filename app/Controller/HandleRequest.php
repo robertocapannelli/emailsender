@@ -15,28 +15,6 @@ class HandleRequest {
 	const CSV = 1;
 	private $request;
 
-	private static $instance = null;
-
-	/**
-	 * HandleRequest constructor.
-	 */
-	private function __construct() {
-	}
-
-
-	/**
-	 * Singleton
-	 *
-	 * @return HandleRequest|null
-	 */
-	public static function getInstance() {
-		if ( self::$instance == null ) {
-			self::$instance = new HandleRequest();
-		}
-
-		return self::$instance;
-	}
-
 	/**
 	 * @param $post
 	 * @param $error_messages
