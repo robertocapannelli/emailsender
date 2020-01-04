@@ -14,11 +14,11 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
 
 	//Check if form fields are valid
 	//TODO should also check the file is valid? How so?
-	if ( $handle_request->isRequestValid( $_POST, $error_messages ) ) {
+	if ( $handle_request->isValid( $_POST, $error_messages ) ) {
 		//Create a request instantiating the request model
-		$request = $handle_request->createRequest( $_POST, $_FILES );
+		$request = $handle_request->create( $_POST, $_FILES );
 		//Process the current request passing the model this method
-		$handle_request->processRequest( $request );
+		$handle_request->process( $request );
 	}
 }
 

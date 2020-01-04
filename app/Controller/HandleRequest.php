@@ -21,7 +21,7 @@ class HandleRequest {
 	 *
 	 * @return bool
 	 */
-	public function isRequestValid( $post, &$error_messages ) {
+	public function isValid( $post, &$error_messages ) {
 		$error = [];
 
 		//TODO should check also the file uploaded?
@@ -59,7 +59,7 @@ class HandleRequest {
 	 *
 	 * @return Request
 	 */
-	public function createRequest( $post, $file ) {
+	public function create( $post, $file ) {
 
 		//Check all values and sanitize
 		foreach ( $post as $key => $value ) {
@@ -91,7 +91,7 @@ class HandleRequest {
 	 *
 	 * @param Request $request
 	 */
-	private function sendRequest( Request $request ) {
+	private function send( Request $request ) {
 
 		$helper = Helper::getInstance();
 
@@ -133,7 +133,7 @@ class HandleRequest {
 	 *
 	 * @return mixed
 	 */
-	private function saveRequest( $dao_factory, Request $request ) {
+	private function save( $dao_factory, Request $request ) {
 
 		//Check the kind of persistence has to be used
 		switch ( $dao_factory ) {
@@ -153,11 +153,11 @@ class HandleRequest {
 	 *
 	 * @param Request $request
 	 */
-	public function processRequest( Request $request ) {
+	public function process( Request $request ) {
 		//Save the request to persistence
-		if ( $this->saveRequest( 1, $request ) ) {
+		if ( $this->save( 1, $request ) ) {
 			//Send request via email
-			$this->sendRequest( $request );
+			$this->send( $request );
 		}
 	}
 }
