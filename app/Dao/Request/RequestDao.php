@@ -12,5 +12,5 @@ interface RequestDao {
 	 *
 	 * @return mixed
 	 */
-	public function insertRequest( Request $request );
+	public function insert( Request $request );
 }

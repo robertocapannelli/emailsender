@@ -14,6 +14,6 @@ abstract class DaoFactory {
 	 * @return mixed
 	 */
 	public function getDaoFactory( $request ) {
-		return $this->getFactoryMethod()->insertRequest( $request );
+		return $this->getFactoryMethod()->insert( $request );
 	}
 }

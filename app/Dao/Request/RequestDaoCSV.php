@@ -12,7 +12,7 @@ class RequestDaoCSV implements RequestDao {
 	 *
 	 * @return bool|mixed
 	 */
-	public function insertRequest( Request $request ) {
+	public function insert( Request $request ) {
 
 		$helper = Helper::getInstance();
 
